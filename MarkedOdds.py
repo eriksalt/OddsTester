@@ -16,22 +16,6 @@ file_raw_results_by_dice: str = "raw_results_by_dice.csv"
 dice_roll_cache = {x: np.empty(x, dtype=np.int64) for x in range(0, 20)}  # {k:v*2 for (k,v) in dict1.items()}
 
 
-def roll_dice_opt_OLD(dice_count: int, rolls: np.ndarray):
-    max_value: int = -1
-    max_index: int = -1
-    for i in range(dice_count):
-        # roll = self.rng.uniform(1,11)
-        # roll = rand.randrange(1, 11)
-        roll = (int(10 * rand.random())) + 1
-        rolls[i] = roll
-        if roll > max_value:
-            max_value = roll
-            max_index = i
-    # swap largest value to end
-    rolls[dice_count - 1], rolls[max_index] = rolls[max_index], rolls[dice_count - 1]
-    return rolls
-
-
 @dataclass
 class OriginalRoll:
     dice_count: int
@@ -42,29 +26,8 @@ class OriginalRoll:
         self.rolls = opt.roll_dice_opt(self.dice_count, dice_roll_cache[self.dice_count])
         return self
 
-    def roll_dice_OLD(self):
-        self.rolls = np.empty(self.dice_count, dtype=np.int64)
-        max_value: int = -1
-        max_index: int = -1
-        for i in range(self.dice_count):
-            # roll = self.rng.uniform(1,11)
-            # roll = rand.randrange(1, 11)
-            roll = (int(10 * rand.random())) + 1
-            self.rolls[i] = roll
-            if roll > max_value:
-                max_value = roll
-                max_index = i
-        # swap largest value to end
-        self.rolls[self.dice_count - 1], self.rolls[max_index] = self.rolls[max_index], self.rolls[self.dice_count - 1]
-        return self
-
     def calculate_results(self):
         self.results = opt.calculate_results(self.rolls)
-        return self
-
-    def calculate_results_OLD(self):
-        max_roll: int = self.rolls[-1]
-        self.results = self.rolls[:-1] + max_roll
         return self
 
 
